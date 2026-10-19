@@ -3,10 +3,9 @@
 Routes
   POST /api/gemini   {op:"generate", prompt}  -> {text}
                      {op:"embed", texts, task} -> {vectors}
-  GET  /             serves public/index.html (local dev; Vercel serves public/ itself)
+  GET  /             serves PUBLIC/index.html
 
 Env vars: GEMINI_API_KEY (required), GEMINI_MODEL, GEMINI_EMBED_MODEL
-Local run: pip install -r requirements.txt && GEMINI_API_KEY=... python app.py
 """
 import json
 import os
@@ -21,7 +20,9 @@ app.config["MAX_CONTENT_LENGTH"] = 1_000_000  # 1 MB request cap
 GEN_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 BASE = "https://generativelanguage.googleapis.com/v1beta/models/"
-PUBLIC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
+
+# Kyunki app.py 'api' folder ke andar hai, isiliye '..' karke ek folder upar jaakar 'PUBLIC' folder ko target kiya hai
+PUBLIC = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "PUBLIC"))
 
 
 def call_gemini(path: str, payload: dict, key: str) -> tuple[int, dict]:
