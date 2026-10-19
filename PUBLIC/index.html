@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CVtro — Between You and Your Success</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0b09;--gold:#d4a84b;--gold2:#f3d78a;--brass:#8a6a2c;--cream:#f3ead7;--mute:#a89a82;--card:rgba(24,18,14,.78);--line:rgba(212,168,75,.22);--ok:#8fd19e;--bad:#e58a7a;--ink:#2a2114}
+*{box-sizing:border-box}html{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--bg);color:var(--cream);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.28;z-index:0;pointer-events:none;will-change:transform}
+.b1{width:46vw;height:46vw;background:#7a4a1a;left:-12vw;top:-10vw}.b2{width:38vw;height:38vw;background:#b08a3e;right:-14vw;top:55vh}
+canvas#orb{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top,0px)) 5vw 12px;background:linear-gradient(180deg,rgba(14,11,9,.92),rgba(14,11,9,0));backdrop-filter:blur(6px)}
+.logo{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:1.6rem;color:var(--gold)}.logo i{color:var(--cream);font-style:normal}
+#steps{display:flex;gap:6px;list-style:none;margin:0;padding:0;font-size:.74rem;color:var(--mute)}
+#steps li{padding:5px 11px;border:1px solid transparent;border-radius:99px;transition:.4s}
+#steps li.on{color:var(--gold);border-color:var(--line);background:rgba(212,168,75,.08)}#steps li.done{color:var(--ok)}
+#prog{position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,var(--brass),var(--gold2))}
+main{position:relative;z-index:2}
+.sec{display:none;max-width:1040px;margin:0 auto;padding:70px 5vw 20px}.sec.show{display:block;animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
+.hero{min-height:100vh;display:flex!important;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:none}
+h1{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:clamp(2.3rem,7.5vw,5.2rem);line-height:1.04;margin:0 0 12px;background:linear-gradient(180deg,var(--cream),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute);max-width:460px;margin:0 0 28px}
+.drop{width:min(540px,100%);padding:34px 22px;border:1.5px dashed var(--gold);border-radius:8px 24px 8px 24px;background:var(--card);cursor:pointer;display:block;transition:.35s}
+.drop:hover,.drop.over{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 18px 50px rgba(212,168,75,.2);background:rgba(212,168,75,.1)}
+.drop b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:1.25rem;color:var(--gold);margin-bottom:4px}.drop span{color:var(--mute);font-size:.88rem}
+details.paste{width:min(540px,100%);margin-top:14px;text-align:left;color:var(--mute);font-size:.88rem}details summary{cursor:pointer}
+textarea,input[type=text],select{width:100%;background:#120d09;color:var(--cream);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit;outline:none;transition:.25s}
+textarea:focus,input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,75,.15)}textarea{min-height:90px;resize:vertical;margin:8px 0}
+h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.5rem,4vw,2.2rem);color:var(--gold);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;backdrop-filter:blur(8px)}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold);padding:11px 24px;border-radius:99px;cursor:pointer;font:600 .9rem Inter,sans-serif;transition:.3s}
+.btn:hover{background:rgba(212,168,75,.14);transform:translateY(-2px)}.btn.solid{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--ink);border-color:transparent}.btn.solid:hover{box-shadow:0 10px 30px rgba(212,168,75,.3)}.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}label.l{display:block;font-size:.78rem;color:var(--mute);margin-bottom:5px}
+.load{display:none;text-align:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,88vw);z-index:70;box-shadow:0 30px 80px rgba(0,0,0,.7);margin:0}.load.on{display:block;animation:rise .5s both}.load .t{font-family:Caveat,cursive;font-size:1.5rem;color:var(--gold2);margin-bottom:10px}
+.track{height:5px;background:#1d1610;border-radius:9px;overflow:hidden}.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brass),var(--gold2));transition:width .6s cubic-bezier(.2,.7,.2,1)}
+details.dt summary{color:var(--mute);font-size:.85rem}#log{list-style:none;padding:0;margin:8px 0 0;font-size:.82rem;color:var(--mute)}#log li{padding:3px 0}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.stat{background:#120d09;border-radius:10px;padding:8px 14px;font-size:.78rem;color:var(--mute)}.stat b{display:block;color:var(--gold);font-size:1.1rem}
+.top{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center}
+.gauge{position:relative;width:190px;height:190px}.gauge svg{transform:rotate(-90deg)}
+.gauge .n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Playfair Display',Georgia,serif;font-size:3rem;font-weight:900}.gauge .n small{font:600 .68rem Inter;color:var(--mute);letter-spacing:.15em}
+.pill{display:inline-block;padding:3px 12px;border-radius:99px;border:1px solid var(--gold);font-size:.78rem;margin:0 6px 6px 0}.pill.g{border-color:var(--ok);color:var(--ok)}.pill.b{border-color:var(--bad);color:var(--bad)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;margin:6px 0 20px}
+.note{background:#f1e3b0;color:var(--ink);padding:18px;border-radius:2px 2px 28px 2px;box-shadow:0 14px 28px rgba(0,0,0,.5);cursor:pointer;transition:.4s;position:relative;min-height:140px}
+.note:nth-child(odd){transform:rotate(-1.3deg)}.note:nth-child(even){transform:rotate(1.1deg)}
+.note::after{content:"";position:absolute;right:0;bottom:0;border-style:solid;border-width:0 0 26px 26px;border-color:transparent transparent var(--brass) transparent;transition:.4s}
+.note:hover,.note.peel{transform:rotate(0) translateY(-6px)}.note.peel::after{border-width:0 0 56px 56px}
+.note h3{margin:0 0 6px;font-family:Caveat,cursive;font-size:1.6rem;display:flex;justify-content:space-between}.note p{margin:0;font-size:.9rem}
+.note .more{max-height:0;overflow:hidden;transition:max-height .45s;font-size:.86rem}.note.peel .more{max-height:160px;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(42,33,20,.4)}
+.dia{list-style:none;padding:0;margin:6px 0}.dia li{position:relative;padding:9px 0 9px 28px;border-bottom:1px solid var(--line);font-size:.93rem;min-height:40px}.dia li::before{content:"";position:absolute;left:5px;top:15px;width:9px;height:9px;background:var(--gold);transform:rotate(45deg)}
+.q{border-left:3px solid var(--gold);padding:10px 14px;margin:12px 0;background:#120d09;border-radius:0 10px 10px 0}.q p{margin:0 0 6px}.q small{color:var(--mute)}.q textarea{display:none}.q.on textarea{display:block}
+.fix{display:flex;gap:10px;padding:7px 0;font-size:.9rem}.fix small{color:var(--mute)}
+.cvp{background:#f7f1e3;color:var(--ink);padding:30px;border-radius:8px;font-family:Georgia,serif;font-size:.93rem;line-height:1.55;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.cvp h4{margin:0;font-size:1.6rem}.cvp h5{margin:16px 0 4px;border-bottom:1px solid var(--ink);font-size:.92rem;letter-spacing:.09em;text-transform:uppercase}.cvp ul{margin:4px 0;padding-left:18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+.err{color:var(--bad);font-size:.9rem;margin-top:10px}
+footer{position:relative;z-index:2;text-align:center;padding:40px;color:var(--mute);font-size:.82rem}
+@media(max-width:700px){.top,.row{grid-template-columns:1fr}.top{justify-items:center;text-align:center}#steps li:not(.on){display:none}}
+@media print{body *{visibility:hidden}.cvp,.cvp *{visibility:visible}.cvp{position:absolute;left:0;top:0;width:100%;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="blob b1" id="b1"></div><div class="blob b2" id="b2"></div><canvas id="orb"></canvas>
+<nav><div class="logo">CV<i>tro</i></div><ol id="steps"><li>Upload</li><li>Analyze</li><li>Decide</li><li>Download</li></ol><div id="prog"></div></nav>
+<main>
+<section class="sec show hero" id="s0">
+  <h1>BETWEEN YOU<br>AND YOUR SUCCESS</h1>
+  <p class="sub">Drop in your CV. Get a grounded review and a rewrite that never invents facts.</p>
+  <label class="drop" id="drop"><b>Drag &amp; drop your CV</b><span>PDF, DOCX or TXT · or tap to browse</span><input type="file" id="file" accept=".pdf,.docx,.txt" hidden></label>
+  <details class="paste"><summary>Paste text instead</summary><textarea id="paste" placeholder="Paste CV text"></textarea><button class="btn" id="usepaste">Use text</button></details>
+  <div class="err" id="e0"></div>
+</section>
+
+<section class="sec" id="s1">
+  <h2>Target field</h2>
+  <div class="card" id="setup">
+    <div class="row"><div><label class="l">What is this CV for?</label><input type="text" id="field" placeholder="e.g. Audit &amp; Assurance, Data Analyst"></div>
+    <div><label class="l">Retrieval</label><select id="mode"><option value="adv">Advanced RAG</option><option value="basic">Basic RAG</option></select></div></div>
+    <div class="actions"><button class="btn solid" id="analyze">Analyze CV</button></div><div class="err" id="e1"></div>
+  </div>
+  <details class="card dt"><summary>Pipeline details</summary><div id="lab"></div><ul id="log"></ul></details>
+</section>
+
+<section class="sec" id="s2"><div id="results"></div></section>
+<section class="sec" id="s3"><div id="ask"></div></section>
+<section class="sec" id="s4"><div id="final"></div></section>
+</main>
+<div class="card load" id="ld"><div class="t" id="ldl">Working…</div><div class="track"><i id="ldb"></i></div></div>
+<footer>CVtro · Taswaib · made with care ✦</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+const $=id=>document.getElementById(id),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={};
+
+// ===== Smooth scroll, parallax, reveal =====
+const lenis=window.Lenis?new Lenis({duration:1.2,smoothWheel:true,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t))}):null;
+let sy=0;
+function frame(t){if(lenis)lenis.raf(t);sy=lenis?lenis.scroll:scrollY;
+  $('b1').style.transform='translateY('+(sy*.12)+'px)';$('b2').style.transform='translateY('+(-sy*.08)+'px)';
+  const h=document.documentElement.scrollHeight-innerHeight;$('prog').style.width=(h>0?sy/h*100:0)+'%';requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+const watch=root=>(root||document).querySelectorAll('.rv:not(.in)').forEach(e=>io.observe(e));
+function go(el){setTimeout(()=>{lenis?lenis.scrollTo(el,{offset:-60,duration:1.5}):el.scrollIntoView({behavior:'smooth'})},120)}
+function show(id,step){const e=$(id);e.classList.add('show');watch(e);go(e);setStep(step)}
+function setStep(n){document.querySelectorAll('#steps li').forEach((l,i)=>{l.className=i<n?'done':i===n?'on':''})}setStep(0);
+
+// ===== WebGL sphere =====
+(function(){if(!window.THREE)return;const r=new THREE.WebGLRenderer({canvas:$('orb'),alpha:true,antialias:true}),sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,100);cam.position.z=6;
+const g=new THREE.Mesh(new THREE.IcosahedronGeometry(1.7,4),new THREE.MeshStandardMaterial({color:0xd4a84b,metalness:.95,roughness:.25})),w=new THREE.Mesh(new THREE.IcosahedronGeometry(1.78,2),new THREE.MeshBasicMaterial({color:0xf3d78a,wireframe:true,transparent:true,opacity:.12}));
+sc.add(g,w,new THREE.AmbientLight(0xffffff,.35));const a=new THREE.PointLight(0xffe6a8,1.6,30);a.position.set(5,4,6);sc.add(a);const b=new THREE.PointLight(0xb06a2a,1.2,30);b.position.set(-6,-3,3);sc.add(b);
+const sz=()=>{r.setSize(innerWidth,innerHeight,false);r.setPixelRatio(Math.min(devicePixelRatio,2));cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()};sz();addEventListener('resize',sz);
+(function L(t){t*=.001;g.rotation.y=t*.3;g.rotation.x=t*.12;w.rotation.y=-t*.2;g.position.y=w.position.y=Math.sin(t)*.2+sy*.0016;g.position.x=w.position.x=Math.min(1.8,sy*.0012);r.render(sc,cam);requestAnimationFrame(L)})(0)})();
+
+// ===== API =====
+async function api(body){const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||'Request failed ('+r.status+')');return j}
+async function ask(p){for(let k=0;k<2;k++){const j=await api({op:'generate',prompt:p});const t=j.text.replace(/^```(?:json)?|```$/gm,'').trim();try{return JSON.parse(t.slice(t.indexOf('{'),t.lastIndexOf('}')+1))}catch(e){}}throw Error('The AI returned an unreadable answer. Please try again.')}
+const unit=v=>{const n=Math.sqrt(v.reduce((a,x)=>a+x*x,0))||1;return Array.from(v,x=>x/n)};
+async function embedAll(t,task){const o=[];for(let i=0;i<t.length;i+=50)o.push(...(await api({op:'embed',texts:t.slice(i,i+50),task})).vectors);return o.map(unit)}
+
+// ===== Vector toolkit =====
+const STOP=new Set('a an the and or of to in on for with at by from as is are was were be been it this that these those i my me we our you your he she they their his her its'.split(' '));
+const toks=s=>(s.toLowerCase().match(/[a-z0-9+#.]{2,}/g)||[]).map(w=>w.replace(/^\.+|\.+$/g,'')).filter(w=>w&&!STOP.has(w)),est=s=>Math.ceil(s.length/4);
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+function hashEmb(text){const w=toks(text),f=w.slice(),v=new Float32Array(256),c={};for(let i=0;i<w.length-1;i++)f.push(w[i]+'_'+w[i+1]);f.forEach(x=>c[x]=(c[x]||0)+1);for(const x in c){const h=hash(x);v[h%256]+=((h>>>16)&1?1:-1)*(1+Math.log(c[x]))}return unit(v)}
+const cos=(a,b)=>{let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s};
+function chunkText(t){const L=t.split(/\n+/).map(x=>x.trim()).filter(Boolean),o=[];let cur=[],w=0;for(const l of L){const n=l.split(/\s+/).length;if(w+n>70&&cur.length){o.push(cur.join('\n'));cur=cur.slice(-1);w=cur[0].split(/\s+/).length}cur.push(l);w+=n}if(cur.length)o.push(cur.join('\n'));return o.map((x,i)=>({id:'C'+(i+1),text:x,t:toks(x),tok:est(x)}))}
+function bm25(q,C){const N=C.length,avg=C.reduce((a,c)=>a+c.t.length,0)/N,qt=[...new Set(toks(q))];return C.map(c=>{let s=0;for(const w of qt){const tf=c.t.filter(x=>x===w).length;if(!tf)continue;const df=C.filter(d=>d.t.includes(w)).length;s+=Math.log(1+(N-df+.5)/(df+.5))*tf*2.2/(tf+1.2*(.25+.75*c.t.length/avg))}return s})}
+const ranks=a=>a.map((s,i)=>[s,i]).sort((x,y)=>y[0]-x[0]).map(x=>x[1]);
+async function retrieve(qs,k,adv){const C=S.chunks,fused=C.map(()=>0),best=C.map(()=>0),Q=S.kind==='gemini'?await embedAll(qs,'RETRIEVAL_QUERY'):qs.map(hashEmb);
+  Q.forEach((qv,qi)=>{const vs=C.map(c=>cos(qv,c.v));vs.forEach((s,i)=>best[i]=Math.max(best[i],s));ranks(vs).forEach((i,r)=>fused[i]+=1/(60+r));if(adv)ranks(bm25(qs[qi],C)).forEach((i,r)=>fused[i]+=1/(60+r))});
+  let order=ranks(adv?fused:best);
+  if(adv){const mx=Math.max(...fused)||1,sel=[],pool=order.slice();while(sel.length<k&&pool.length){let bi=0,bs=-1e9;pool.forEach((i,pi)=>{const dv=sel.length?Math.max(...sel.map(j=>cos(C[i].v,C[j].v))):0,sc=.7*fused[i]/mx-.3*dv;if(sc>bs){bs=sc;bi=pi}});sel.push(pool.splice(bi,1)[0])}order=sel}
+  return order.slice(0,k).map(i=>({...C[i],sim:best[i]}))}
+
+// ===== Progress UI =====
+function prog(n,total,label){$('ld').classList.add('on');$('ldl').textContent=label;$('ldb').style.width=Math.round(n/total*100)+'%'}
+function endProg(){$('ld').classList.remove('on');$('ldb').style.width='0'}
+const log=m=>{const li=document.createElement('li');li.textContent=m;$('log').appendChild(li)};
+
+// ===== Ingest =====
+async function readFile(f){
+  if(/\.txt$/i.test(f.name))return f.text();const buf=await f.arrayBuffer();
+  if(/\.docx$/i.test(f.name))return(await mammoth.extractRawText({arrayBuffer:buf})).value;
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;let out='';
+  for(let p=1;p<=pdf.numPages;p++){const c=await(await pdf.getPage(p)).getTextContent();let y=null;c.items.forEach(i=>{const yy=i.transform[5];if(y!==null&&Math.abs(yy-y)>3)out+='\n';out+=i.str+' ';y=yy});out+='\n'}return out}
+const SECS={summary:/\b(summary|profile|objective|about me)\b/i,experience:/\b(experience|employment|work history|internship)\b/i,education:/\b(education|academic|qualification)\b/i,skills:/\b(skills|competenc|technical)\b/i,projects:/\bprojects?\b/i,certifications:/\b(certif|courses|training)\b/i};
+const norm=s=>String(s).toLowerCase().replace(/\s+/g,' ').trim();
+const drop=$('drop');['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over')}));['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));$('file').onchange=e=>pick(e.target.files[0]);
+$('usepaste').onclick=()=>{const t=$('paste').value.trim();if(t)ingest(Promise.resolve(t),'pasted text')};
+function pick(f){if(!f)return;if(!/\.(pdf|docx|txt)$/i.test(f.name)){$('e0').textContent='Please upload a PDF, DOCX or TXT file.';return}ingest(readFile(f),f.name)}
+async function ingest(p,name){
+  $('e0').textContent='';$('log').innerHTML='';['s2','s3','s4'].forEach(i=>$(i).classList.remove('show'));$('results').innerHTML=$('ask').innerHTML=$('final').innerHTML='';
+  $('s1').classList.add('show');$('setup').style.display='none';prog(1,3,'Reading your CV…');go($('s1'));setStep(1);
+  try{const raw=await p;S={name,text:raw.replace(/\r/g,'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim()};
+    S.words=S.text.split(/\s+/).filter(Boolean).length;if(S.words<40)throw Error('Too little text found (scanned PDF?). Paste the text instead.');
+    S.found=Object.keys(SECS).filter(k=>SECS[k].test(S.text));S.email=/[\w.+-]+@[\w-]+\.[\w.]+/.test(S.text);
+    prog(2,3,'Building vectors…');S.chunks=chunkText(S.text);let vs;
+    try{vs=await embedAll(S.chunks.map(c=>c.text),'RETRIEVAL_DOCUMENT');S.kind='gemini'}catch(e){vs=S.chunks.map(c=>hashEmb(c.text));S.kind='local';log('Gemini embeddings unavailable ('+e.message+') — using local vectors.')}
+    S.chunks.forEach((c,i)=>c.v=vs[i]);log(S.words+' words · sections: '+(S.found.join(', ')||'none'));
+    lab();endProg();$('setup').style.display='block'}catch(e){endProg();$('s1').classList.remove('show');$('s0').classList.add('show');$('e0').textContent=e.message;go($('s0'));setStep(0)}}
+function lab(hits){const T=est(S.text);$('lab').innerHTML='<div class="stats"><div class="stat"><b>~'+T+'</b>tokens</div><div class="stat"><b>'+S.chunks.length+'</b>chunks</div><div class="stat"><b>'+S.chunks[0].v.length+'</b>dims</div><div class="stat"><b>'+(S.kind==='gemini'?'Gemini':'Local')+'</b>embeddings</div></div>'+(hits?hits.map(x=>'<div class="stat" style="margin:4px 0">'+x.id+' · similarity '+x.sim.toFixed(3)+'</div>').join(''):'')}
+
+// ===== Analysis =====
+const SCHEMA='{"score":0-100,"summary":"1-2 sentences","field_fit":{"score":0-100,"verdict":"Fits|Partial|Does not fit","matched":["..."],"gaps":["..."]},"notes":[{"title":"Skills|Experience|Format|Grammar","score":0-10,"text":"short","fix":"short"}],"issues":[{"section":"","problem":"","evidence":"EXACT quote copied from the CV text","fix":"rewrite using only facts already in the CV"}],"missing":[{"section":"","why":"","question":"question to ask the user"}],"recommendations":["..."]}';
+$('analyze').onclick=async()=>{
+  const field=$('field').value.trim();$('e1').textContent='';if(!field){$('e1').textContent='Please enter the target field.';return}
+  const adv=$('mode').value==='adv',T=adv?5:4;S.field=field;$('setup').style.display='none';['s2','s3','s4'].forEach(i=>$(i).classList.remove('show'));
+  try{let qs=[field+' skills experience qualifications'];
+    if(adv){prog(1,T,'Expanding the query…');try{const r=await ask('Return JSON {"queries":["..."]} with 5 short search queries (max 8 words each) to find CV evidence relevant to the field "'+field+'".');qs=qs.concat((r.queries||[]).slice(0,5).map(String))}catch(e){log('Query expansion skipped: '+e.message)}}
+    prog(adv?2:1,T,'Retrieving context…');const hits=await retrieve(qs,adv?8:4,adv);if(!hits.length)throw Error('Nothing retrieved.');lab(hits);log('Retrieved '+hits.map(h=>h.id).join(', '));
+    prog(adv?3:2,T,'Analyzing…');
+    const a=await ask('You are a strict, honest CV reviewer. Target field: "'+field+'".\nFacts: '+S.words+' words; section headings found: '+(S.found.join(', ')||'none')+'; email '+(S.email?'present':'absent')+'.\nRETRIEVED CV CHUNKS:\n'+hits.map(x=>'['+x.id+']\n'+x.text).join('\n\n')+'\n\nRules: judge ONLY what is in the chunks; never invent facts; "evidence" must be an exact quote; "missing" lists only standard sections absent from the CV; judge honestly whether the CV fits the field ("Does not fit" is allowed). Always give 4 notes (Skills, Experience, Format, Grammar).\nReturn JSON only, schema: '+SCHEMA);
+    prog(adv?4:3,T,'Verifying against your CV…');
+    const before=(a.issues||[]).length;a.issues=(a.issues||[]).filter(x=>x.evidence&&norm(S.text).includes(norm(x.evidence)));log((before-a.issues.length)+' ungrounded issue(s) removed');
+    a.missing=a.missing||[];['summary','experience','education','skills'].forEach(k=>{if(!S.found.includes(k)&&!a.missing.some(m=>norm(m.section).includes(k)))a.missing.push({section:k[0].toUpperCase()+k.slice(1),why:'No heading detected.',question:'Do you want to add a '+k+' section? If yes, share the real details.'})});
+    a.score=Math.max(0,Math.min(100,+a.score||0));S.a=a;prog(T,T,'Done');
+    setTimeout(()=>{endProg();$('setup').style.display='block';renderResults(a);show('s2',1);setTimeout(()=>{renderAsk(a);show('s3',2)},2600)},350);
+  }catch(e){endProg();$('setup').style.display='block';$('e1').textContent=e.message}};
+
+const gauge=(s,id)=>'<div class="gauge"><svg width="190" height="190" viewBox="0 0 210 210"><circle cx="105" cy="105" r="92" fill="none" stroke="#2c2218" stroke-width="14"/><circle id="'+id+'" cx="105" cy="105" r="92" fill="none" stroke="#d4a84b" stroke-width="14" stroke-linecap="round" stroke-dasharray="578" stroke-dashoffset="578" style="transition:stroke-dashoffset 1.8s cubic-bezier(.2,.7,.2,1)"/></svg><div class="n"><span id="'+id+'n">0</span><small>ATS SCORE</small></div></div>';
+function animGauge(id,s){setTimeout(()=>{const a=$(id);if(a)a.style.strokeDashoffset=578*(1-s/100);let c=0;const n=$(id+'n'),t=setInterval(()=>{c++;if(n)n.textContent=c;if(c>=s)clearInterval(t)},1600/Math.max(s,1))},500)}
+function renderResults(a){const ff=a.field_fit||{},cls=ff.verdict==='Fits'?'g':ff.verdict==='Does not fit'?'b':'';
+  $('results').innerHTML='<h2 class="rv">'+esc(S.field)+'</h2><div class="card rv"><div class="top">'+gauge(a.score,'arc')+'<div><p style="margin-top:0">'+esc(a.summary)+'</p><span class="pill '+cls+'">Field fit · '+esc(ff.verdict)+' '+(+ff.score||0)+'/100</span><div>'+(ff.matched||[]).map(x=>'<span class="pill g">✓ '+esc(x)+'</span>').join('')+(ff.gaps||[]).map(x=>'<span class="pill b">✕ '+esc(x)+'</span>').join('')+'</div></div></div></div>'
+   +'<div class="notes rv">'+(a.notes||[]).map(n=>'<div class="note"><h3>'+esc(n.title)+'<span>'+(+n.score||0)+'/10</span></h3><p>'+esc(n.text)+'</p><div class="more">'+esc(n.fix)+'</div></div>').join('')+'</div>'
+   +'<div class="card rv"><ul class="dia" id="recs">'+(a.recommendations||[]).map(()=>'<li></li>').join('')+'</ul></div>';
+  document.querySelectorAll('.note').forEach(n=>n.onclick=()=>n.classList.toggle('peel'));animGauge('arc',a.score);
+  const lis=document.querySelectorAll('#recs li'),R=a.recommendations||[];let k=0;(function nx(){if(k>=lis.length)return;const t=String(R[k]),li=lis[k];let i=0;const h=setInterval(()=>{li.textContent=t.slice(0,++i);if(i>=t.length){clearInterval(h);k++;setTimeout(nx,120)}},14)})()}
+
+function renderAsk(a){let h='<h2 class="rv">Your decisions</h2><div class="card rv">';
+  if(a.missing.length)h+=a.missing.map((m,i)=>'<div class="q" id="q'+i+'"><p><b>'+esc(m.section)+'</b> <small>'+esc(m.why)+'</small></p><label><input type="checkbox" onchange="this.closest(\'.q\').classList.toggle(\'on\',this.checked)"> Add this section</label><textarea placeholder="Real details only — what you type is what gets used"></textarea></div>').join('');
+  if(a.issues.length)h+='<h3 style="color:var(--gold);font-size:1.05rem">Approve changes</h3>'+a.issues.map((x,i)=>'<label class="fix"><input type="checkbox" checked data-i="'+i+'"><span><b>'+esc(x.section)+':</b> '+esc(x.problem)+'<br><small>'+esc(x.fix)+'</small></span></label>').join('');
+  h+='<div class="actions"><button class="btn solid" id="gen">✨ Generate my best CV</button></div><div class="err" id="e3"></div></div>';$('ask').innerHTML=h;watch($('ask'));$('gen').onclick=generate}
+
+// ===== Generation =====
+const cvText=cv=>[cv.name,(cv.contact||[]).join(' | ')].filter(Boolean).join('\n')+'\n\n'+(cv.sections||[]).map(s=>s.title.toUpperCase()+'\n'+s.bullets.map(b=>'- '+b).join('\n')).join('\n\n');
+async function generate(){
+  const a=S.a,adds=[];document.querySelectorAll('#ask .q.on').forEach(q=>{const t=q.querySelector('textarea').value.trim();if(t)adds.push(a.missing[+q.id.slice(1)].section+': '+t)});
+  const fixes=[...document.querySelectorAll('#ask .fix input:checked')].map(c=>{const x=a.issues[+c.dataset.i];return x.section+': '+x.fix});
+  $('gen').disabled=true;$('e3').textContent='';$('final').innerHTML='';$('s4').classList.remove('show');$('s1').classList.add('show');
+  let prev='',cv,txt,sc;const nums=s=>(s.match(/\d[\d,.%+]*/g)||[]).map(n=>n.replace(/[.,]$/,'').toLowerCase());
+  try{for(let p=1;p<=2;p++){const src=S.text+'\n'+adds.join('\n');
+      prog(p===1?1:4,7,'Writing your CV…');
+      cv=await ask('Rewrite this CV for the field "'+S.field+'".\nSOURCE CV:\n'+S.text+'\n\nUSER-PROVIDED ADDITIONS (verbatim facts from the user):\n'+(adds.join('\n')||'none')+'\n\nAPPROVED FIXES:\n'+(fixes.join('\n')||'none')+(prev?'\n\nREMAINING ISSUES TO FIX WITHOUT NEW FACTS:\n'+prev:'')+'\n\nHARD RULES: use ONLY facts present in SOURCE CV or USER-PROVIDED ADDITIONS. Never invent employers, dates, degrees, skills, numbers, metrics, tools or sections. Omit any section with no source content. A summary is allowed only if built purely from stated facts. Improve grammar, tense, bullets, strong verbs; order sections for the field; plain ATS-safe headings; keep contact details exactly as in the source.\nReturn JSON only: {"name":"","contact":["..."],"sections":[{"title":"","bullets":["..."]}]}');
+      cv.sections=(cv.sections||[]).map(s=>({title:String(s.title),bullets:(s.bullets||[]).map(String)}));
+      prog(p===1?3:5,7,'Checking every fact…');const sn=norm(src);let rem=0;
+      cv.sections.forEach(s=>{const k=s.bullets.filter(b=>nums(b).every(n=>sn.includes(n)));rem+=s.bullets.length-k.length;s.bullets=k});cv.contact=(cv.contact||[]).filter(c=>sn.includes(norm(c)));
+      try{const v=await ask('Compare GENERATED CV with SOURCE (CV + user additions). List every generated line with a claim (employer, role, date, degree, skill, tool, metric) NOT supported by SOURCE.\nSOURCE:\n'+src+'\n\nGENERATED:\n'+cvText(cv)+'\n\nReturn JSON only: {"unsupported":[{"line":"exact generated line"}]}');
+        const bad=(v.unsupported||[]).map(x=>norm(x.line||'')).filter(Boolean);cv.sections.forEach(s=>{const k=s.bullets.filter(b=>!bad.some(u=>norm(b).includes(u)||u.includes(norm(b))));rem+=s.bullets.length-k.length;s.bullets=k})}catch(e){log('AI fact-check skipped: '+e.message)}
+      log('Pass '+p+': '+rem+' unsupported line(s) removed');cv.sections=cv.sections.filter(s=>s.bullets.length);txt=cvText(cv);
+      prog(p===1?5:6,7,'Scoring…');
+      sc=await ask('Score this CV for the field "'+S.field+'" (ATS readiness, clarity, grammar, structure, field relevance). Be honest: 100 only if nothing can be improved from the facts present.\nCV:\n'+txt+'\nReturn JSON only: {"score":0-100,"field_fit":0-100,"issues":[{"problem":"","fix":"fix possible WITHOUT new facts, or \'needs user info\'"}],"summary":""}');
+      const fx=(sc.issues||[]).filter(x=>!/needs user info/i.test(x.fix));if((+sc.score||0)>=100||!fx.length)break;prev=fx.map(x=>x.problem+' → '+x.fix).join('\n')}
+    if(!cv.sections.length)throw Error('Nothing verifiable remained. Add real details above and try again.');
+    S.cv=cv;S.txt=txt;prog(7,7,'Done');setTimeout(()=>{endProg();$('gen').disabled=false;renderFinal(sc);show('s4',3)},350);
+  }catch(e){endProg();$('gen').disabled=false;$('e3').textContent=e.message}}
+
+const cvHtml=cv=>'<h4>'+esc(cv.name)+'</h4><div>'+esc((cv.contact||[]).join(' · '))+'</div>'+cv.sections.map(s=>'<h5>'+esc(s.title)+'</h5><ul>'+s.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>').join('');
+function renderFinal(sc){const gaps=(sc.issues||[]).filter(x=>/needs user info/i.test(x.fix)),s=Math.max(0,Math.min(100,+sc.score||0));
+  $('final').innerHTML='<h2 class="rv">Your CV</h2><div class="card rv"><div class="top">'+gauge(s,'arc2')+'<div><p style="margin-top:0">'+esc(sc.summary)+'</p><span class="pill g">Field fit · '+(+sc.field_fit||0)+'/100</span><span class="pill">Fact-checked</span>'+(s<100&&gaps.length?'<ul class="dia">'+gaps.map(x=>'<li>Needs your input: '+esc(x.problem)+'</li>').join('')+'</ul>':'')+'</div></div></div><div class="cvp rv">'+cvHtml(S.cv)+'</div><div class="actions rv"><button class="btn solid" data-f="pdf">PDF</button><button class="btn solid" data-f="doc">Word</button><button class="btn" data-f="txt">TXT</button><button class="btn" data-f="md">Markdown</button></div>';
+  watch($('final'));animGauge('arc2',s);document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>save(b.dataset.f))}
+function dl(n,d,t){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:t}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+function save(f){const cv=S.cv,base=(cv.name||'CV').replace(/[^\w]+/g,'_')+'_CVtro';
+  if(f==='pdf'){window.print();return}
+  if(f==='txt')return dl(base+'.txt',S.txt,'text/plain');
+  if(f==='md')return dl(base+'.md','# '+cv.name+'\n'+(cv.contact||[]).join(' | ')+'\n\n'+cv.sections.map(s=>'## '+s.title+'\n'+s.bullets.map(b=>'- '+b).join('\n')).join('\n\n'),'text/markdown');
+  dl(base+'.doc','<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>body{font-family:Calibri,sans-serif;font-size:11pt}h4{font-size:20pt;margin:0}h5{border-bottom:1px solid #000;text-transform:uppercase;margin:14px 0 4px}</style></head><body>'+cvHtml(cv)+'</body></html>','application/msword')}
+</script>
+</body>
+</html>
